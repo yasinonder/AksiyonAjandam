@@ -27,3 +27,10 @@ Android için geliştirilen; sesli/yazılı aksiyon kaydı, fotoğraf ekleme, ta
 - Android Speech Recognizer
 
 İlk geliştirme sürümüdür.
+
+
+## v0.2
+- Özel Aksiyon Ajandam renk paleti
+- Açık/koyu tema
+- Yeni ajanda + onay işareti uygulama ikonu
+- Kurulum paketi sürümü 0.2.0
