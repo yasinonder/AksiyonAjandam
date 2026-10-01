@@ -132,10 +132,9 @@ private fun HomeScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = onAdd,
-                text = { Text("+ Yeni Aksiyon") }
-            )
+            FloatingActionButton(onClick = onAdd) {
+                Text("+")
+            }
         }
     ) { padding ->
         Column(
