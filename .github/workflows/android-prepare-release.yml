@@ -1,0 +1,55 @@
+name: Prepare v0.3 Unsigned Release
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ".github/workflows/android-prepare-release.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle 9.6
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.6.0"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools"
+
+      - name: Install Android SDK 36
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Build release APK and AAB
+        run: gradle :app:clean :app:assembleRelease :app:bundleRelease --stacktrace
+
+      - name: Prepare unsigned files
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/release/app-release-unsigned.apk dist/AksiyonAjandam-v0.3.0-unsigned.apk
+          cp app/build/outputs/bundle/release/app-release.aab dist/AksiyonAjandam-v0.3.0-unsigned.aab
+          cp "$ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar" dist/apksigner.jar
+
+      - name: Upload unsigned release
+        uses: actions/upload-artifact@v4
+        with:
+          name: AksiyonAjandam-v0.3.0-unsigned
+          path: dist/*
+          if-no-files-found: error
